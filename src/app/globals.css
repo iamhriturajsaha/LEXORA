@@ -1,0 +1,258 @@
+@import "tailwindcss";
+
+/* =============================================
+   LEXORA Design System
+   Editorial + Enterprise Intelligence + Subtle Futurism
+   ============================================= */
+
+@theme {
+  /* Primary palette — Deep Obsidian & Space Black */
+  --color-lexora-50: #fcfcfd;
+  --color-lexora-100: #f4f5f6;
+  --color-lexora-200: #e5e7eb;
+  --color-lexora-300: #d1d5db;
+  --color-lexora-400: #9ca3af;
+  --color-lexora-500: #6b7280;
+  --color-lexora-600: #4b5563;
+  --color-lexora-700: #374151;
+  --color-lexora-800: #1a1a24;
+  --color-lexora-900: #0a0a0f;
+  --color-lexora-950: #030305;
+
+  /* Accent — Ethereal Desert Mirage (Unique Developer Palette) */
+  --color-accent-50: #e5fff5;
+  --color-accent-100: #b3ffdf;
+  --color-accent-200: #80ffc9;
+  --color-accent-300: #4dffb2;
+  --color-accent-400: #1aff9c;
+  --color-accent-500: #00F5A0; /* Electric Jade (High Visibility) */
+  --color-accent-600: #00d188;
+  --color-accent-700: #7B2CBF; /* Cosmic Violet */
+  --color-accent-800: #FF6F59; /* Neon Terracotta */
+  --color-accent-900: #d84d3a;
+
+  /* Semantic colors */
+  --color-risk-high: #FF6F59;
+  --color-risk-medium: #7B2CBF;
+  --color-risk-low: #00F5A0;
+  --color-risk-info: #00d188;
+  --color-success: #00F5A0;
+  --color-warning: #FF6F59;
+  --color-danger: #d84d3a;
+
+  /* Typography scale */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* Base styles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-lexora-950);
+  color: var(--color-lexora-100);
+  line-height: 1.6;
+}
+
+/* Focus styles */
+*:focus-visible {
+  outline: 2px solid var(--color-accent-500);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-lexora-600);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-lexora-500);
+}
+
+/* Selection */
+::selection {
+  background: var(--color-accent-500);
+  color: white;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =============================================
+   Component Styles
+   ============================================= */
+
+/* Risk level badges */
+.risk-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.risk-badge--high {
+  background: color-mix(in srgb, var(--color-risk-high) 15%, transparent);
+  color: var(--color-risk-high);
+  border: 1px solid color-mix(in srgb, var(--color-risk-high) 30%, transparent);
+}
+
+.risk-badge--medium {
+  background: color-mix(in srgb, var(--color-risk-medium) 15%, transparent);
+  color: var(--color-risk-medium);
+  border: 1px solid color-mix(in srgb, var(--color-risk-medium) 30%, transparent);
+}
+
+.risk-badge--low {
+  background: color-mix(in srgb, var(--color-risk-low) 15%, transparent);
+  color: var(--color-risk-low);
+  border: 1px solid color-mix(in srgb, var(--color-risk-low) 30%, transparent);
+}
+
+.risk-badge--info {
+  background: color-mix(in srgb, var(--color-accent-500) 15%, transparent);
+  color: var(--color-accent-500);
+  border: 1px solid color-mix(in srgb, var(--color-accent-500) 30%, transparent);
+}
+
+/* Source chip */
+.source-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: color-mix(in srgb, var(--color-accent-500) 10%, transparent);
+  color: var(--color-accent-400);
+  border: 1px solid color-mix(in srgb, var(--color-accent-500) 20%, transparent);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.source-chip:hover {
+  background: color-mix(in srgb, var(--color-accent-500) 20%, transparent);
+  border-color: var(--color-accent-500);
+}
+
+/* Clause highlight */
+.clause-highlight {
+  background: color-mix(in srgb, var(--color-accent-500) 8%, transparent);
+  border-left: 3px solid var(--color-accent-500);
+  padding: 12px 16px;
+  border-radius: 0 6px 6px 0;
+  margin: 8px 0;
+  transition: all 0.2s ease;
+}
+
+.clause-highlight--active {
+  background: color-mix(in srgb, var(--color-accent-500) 15%, transparent);
+  border-left-color: var(--color-accent-400);
+}
+
+/* Document reader */
+.document-content {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--color-lexora-200);
+}
+
+.document-content p {
+  margin-bottom: 12px;
+}
+
+.document-content .section-heading {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--color-lexora-50);
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+
+/* Skeleton loader */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+.skeleton {
+  background: var(--color-lexora-800);
+  border-radius: 4px;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+/* Analysis stage indicator */
+@keyframes stage-progress {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+.stage-progress-bar {
+  height: 2px;
+  background: var(--color-accent-500);
+  animation: stage-progress 2s ease-in-out;
+}
+
+/* Panel transitions */
+.panel-enter {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.panel-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.2s ease;
+}
+
+/* Landing page hero animation */
+@keyframes hero-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.hero-float {
+  animation: hero-float 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-float {
+    animation: none;
+  }
+}

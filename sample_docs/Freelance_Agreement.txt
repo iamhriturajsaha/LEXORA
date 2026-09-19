@@ -1,0 +1,19 @@
+FREELANCE SERVICES AGREEMENT
+
+This Freelance Services Agreement (the 'Agreement') is made and entered into as of October 1, 2024, by and between Meridian Digital Solutions, LLC, a Delaware limited liability company ('Client'), and John Doe ('Contractor').
+
+1. SCOPE OF SERVICES
+Contractor agrees to provide web development and design services to Client.
+
+2. TERM AND TERMINATION
+2.1 Term. This Agreement shall commence on October 1, 2024, and continue for a period of six (6) months.
+2.2 Auto-Renewal. This Agreement shall automatically renew for successive three (3) month periods unless either party provides written notice of intent not to renew at least thirty (30) days prior to the expiration of the then-current term.
+2.3 Termination for Cause. Either party may terminate this Agreement immediately upon written notice if the other party breaches any material term of this Agreement and fails to cure such breach within fifteen (15) days.
+
+3. COMPENSATION
+3.1 Fees. Client shall pay Contractor a monthly retainer of $2,500.00 for up to forty (40) hours of Services per month. Additional hours shall be billed at a rate of $125.00 per hour.
+3.2 Payment Terms. Contractor shall submit invoices on the first business day of each month. Client shall pay all undisputed amounts within net thirty (30) days of receipt.
+
+4. INTELLECTUAL PROPERTY
+4.1 Work Made for Hire. All work product, code, designs, and deliverables created by Contractor under this Agreement shall be considered 'work made for hire' and shall be the exclusive property of Client.
+4.2 Contractor Tools. Contractor retains all rights to any pre-existing libraries, frameworks, or tools used in the provision of the Services ('Contractor Tools'). Contractor grants Client a perpetual, non-exclusive, royalty-free license to use the Contractor Tools solely as incorporated into the deliverables.
