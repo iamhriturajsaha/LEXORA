@@ -15,18 +15,12 @@ Lexora is an ultra-premium, AI-powered legal document intelligence platform. Des
 </p>
 
 ## 🚀 Key Features
-* **🧠 Context-Aware Intelligence Panel**
-As you scroll through a contract, Lexora's intelligence panel intelligently tracks your viewport, automatically highlighting relevant clauses, risks and plain-language translations in sync with your reading.
-* **✍️ AI Auto-Redlining**
-Click on any clause to generate instant "Pro-Client" and "Market Standard" alternative drafts. Copy them to your clipboard with a single click to drop right into your negotiations.
-* **📊 Market Standard Benchmarking**
-Stop guessing if a clause is fair. Lexora visually plots specific risks (like IP assignments or non-competes) on a benchmark gauge to show exactly how favorable or unfavorable they are compared to industry standards.
-* **⏱️ Chronos Engine (Calendar Sync)**
-Lexora's timeline engine extracts every deadline, milestone and recurring commitment from a document and plots them chronologically. Export them directly to an `.ics` file to sync with Google Calendar or Outlook.
-* **💬 Ask the Document**
-Query the contract using natural language. Ask "Who owns the IP?" or "What happens if I terminate early?" and Lexora will find the exact clause and provide an AI-generated answer.
-* **⚡ Premium Micro-Interactions**
-Built with Framer Motion, the platform features buttery-smooth transitions, magnetic buttons, custom cursors and glassmorphic UI elements that make legal review actually feel enjoyable.
+* **🧠 Context-Aware Intelligence Panel** - As you scroll through a contract, Lexora's intelligence panel intelligently tracks your viewport, automatically highlighting relevant clauses, risks and plain-language translations in sync with your reading.
+* **✍️ AI Auto-Redlining** - Click on any clause to generate instant "Pro-Client" and "Market Standard" alternative drafts. Copy them to your clipboard with a single click to drop right into your negotiations.
+* **📊 Market Standard Benchmarking** - Stop guessing if a clause is fair. Lexora visually plots specific risks (like IP assignments or non-competes) on a benchmark gauge to show exactly how favorable or unfavorable they are compared to industry standards.
+* **⏱️ Chronos Engine (Calendar Sync)** - Lexora's timeline engine extracts every deadline, milestone and recurring commitment from a document and plots them chronologically. Export them directly to an `.ics` file to sync with Google Calendar or Outlook.
+* **💬 Ask the Document** - Query the contract using natural language. Ask "Who owns the IP?" or "What happens if I terminate early?" and Lexora will find the exact clause and provide an AI-generated answer.
+* **⚡ Premium Micro-Interactions** - Built with Framer Motion, the platform features buttery-smooth transitions, magnetic buttons, custom cursors and glassmorphic UI elements that make legal review actually feel enjoyable.
 
 ## 🛠️ Tech Stack
 * **Framework** - [Next.js](https://nextjs.org/) 16 (App Router)
