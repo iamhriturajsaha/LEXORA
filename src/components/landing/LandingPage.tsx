@@ -146,9 +146,9 @@ export function LandingPage() {
                   <FileText className="w-5 h-5 relative z-10" />
                   <span className="relative z-10">Upload Document</span>
                   <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-2 transition-transform" />
-                  <input type="file" className="hidden" accept=".pdf,.txt,.md,.docx" onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) handleFileUpload(file, dispatch);
+                  <input type="file" className="hidden" accept=".pdf,.txt,.md,.docx" multiple onChange={(e) => {
+                    const files = e.target.files ? Array.from(e.target.files) : [];
+                    if (files.length > 0) handleFileUpload(files, dispatch);
                   }} />
                 </label>
               </MagneticButton>
