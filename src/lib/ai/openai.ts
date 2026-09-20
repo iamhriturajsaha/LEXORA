@@ -168,8 +168,13 @@ export class OpenAIProvider implements AIProvider {
     const prompt = LAWYER_BRIEF_PROMPT + analysisJson;
     const result = await this.generateJSON(prompt);
 
-    const parsed = lawyerBriefSchema.safeParse({ ...result, documentId: doc.id });
+    const parsed = lawyerBriefSchema.safeParse({ 
+      ...result, 
+      documentId: doc.id,
+      generatedAt: new Date().toISOString()
+    });
     if (!parsed.success) {
+      console.error('Lawyer brief validation failed:', parsed.error);
       throw new Error('Lawyer brief failed validation');
     }
 

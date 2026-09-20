@@ -160,40 +160,40 @@ export const comparisonResultSchema = z.object({
 
 export const actionPlanSchema = z.object({
   documentId: z.string(),
-  beforeSigning: z.array(z.object({
-    id: z.string(),
+  beforeSigning: z.preprocess((v) => (Array.isArray(v) ? v : []), z.array(z.object({
+    id: z.string().catch(() => `ts-${Math.random().toString(36).substring(7)}`),
     text: z.string(),
-    priority: z.enum(['high', 'medium', 'low']),
-    completed: z.boolean(),
+    priority: z.enum(['high', 'medium', 'low']).catch('medium'),
+    completed: z.boolean().catch(false),
     relatedClauseId: z.string().optional(),
-  })),
-  afterSigning: z.array(z.object({
-    id: z.string(),
+  }))).catch([]),
+  afterSigning: z.preprocess((v) => (Array.isArray(v) ? v : []), z.array(z.object({
+    id: z.string().catch(() => `ts-${Math.random().toString(36).substring(7)}`),
     text: z.string(),
-    priority: z.enum(['high', 'medium', 'low']),
-    completed: z.boolean(),
+    priority: z.enum(['high', 'medium', 'low']).catch('medium'),
+    completed: z.boolean().catch(false),
     relatedClauseId: z.string().optional(),
-  })),
-  questionsForCounsel: z.array(z.string()),
-  datesToRemember: z.array(deadlineSchema),
-  informationToGather: z.array(z.string()),
+  }))).catch([]),
+  questionsForCounsel: z.preprocess((v) => (Array.isArray(v) ? v : []), z.array(z.string())).catch([]),
+  datesToRemember: z.preprocess((v) => (Array.isArray(v) ? v : []), z.array(deadlineSchema)).catch([]),
+  informationToGather: z.preprocess((v) => (Array.isArray(v) ? v : []), z.array(z.string())).catch([]),
 });
 
 export const lawyerBriefSchema = z.object({
   documentId: z.string(),
-  overview: z.string(),
-  parties: z.array(z.string()),
-  purpose: z.string(),
-  importantObligations: z.array(z.string()),
-  keyDates: z.array(z.string()),
-  monetaryTerms: z.array(z.string()),
-  attentionAreas: z.array(z.string()),
-  ambiguities: z.array(z.string()),
-  keyQuestions: z.array(z.string()),
-  sectionsRequiringReview: z.array(z.string()),
-  userNotes: z.array(z.string()),
-  sourceReferences: z.array(evidenceSourceSchema),
-  generatedAt: z.string(),
+  overview: z.string().catch(''),
+  parties: z.preprocess((v) => (Array.isArray(v) ? v : []), z.array(z.string())).catch([]),
+  purpose: z.string().catch(''),
+  importantObligations: z.preprocess((v) => (Array.isArray(v) ? v : []), z.array(z.string())).catch([]),
+  keyDates: z.preprocess((v) => (Array.isArray(v) ? v : []), z.array(z.string())).catch([]),
+  monetaryTerms: z.preprocess((v) => (Array.isArray(v) ? v : []), z.array(z.string())).catch([]),
+  attentionAreas: z.preprocess((v) => (Array.isArray(v) ? v : []), z.array(z.string())).catch([]),
+  ambiguities: z.preprocess((v) => (Array.isArray(v) ? v : []), z.array(z.string())).catch([]),
+  keyQuestions: z.preprocess((v) => (Array.isArray(v) ? v : []), z.array(z.string())).catch([]),
+  sectionsRequiringReview: z.preprocess((v) => (Array.isArray(v) ? v : []), z.array(z.string())).catch([]),
+  userNotes: z.preprocess((v) => (Array.isArray(v) ? v : []), z.array(z.string())).catch([]),
+  sourceReferences: z.preprocess((v) => (Array.isArray(v) ? v : []), z.array(evidenceSourceSchema)).catch([]),
+  generatedAt: z.string().catch(() => new Date().toISOString()),
 });
 
 /** File upload validation */
