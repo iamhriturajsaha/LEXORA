@@ -116,11 +116,11 @@ export const documentAnalysisSchema = z.object({
 });
 
 export const groundedAnswerSchema = z.object({
-  answer: z.string(),
-  evidence: z.array(evidenceSourceSchema),
-  uncertainties: z.array(z.string()),
-  suggestedLawyerQuestions: z.array(z.string()),
-  isFromDocument: z.boolean(),
+  answer: z.string().catch('I could not process the answer.'),
+  evidence: z.preprocess((v) => (Array.isArray(v) ? v : []), z.array(evidenceSourceSchema)).catch([]),
+  uncertainties: z.preprocess((v) => (Array.isArray(v) ? v : []), z.array(z.string())).catch([]),
+  suggestedLawyerQuestions: z.preprocess((v) => (Array.isArray(v) ? v : []), z.array(z.string())).catch([]),
+  isFromDocument: z.boolean().catch(false),
 });
 
 export const materialChangeSchema = z.object({
