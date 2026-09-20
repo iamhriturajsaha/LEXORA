@@ -127,7 +127,7 @@ export function ComparisonView() {
             </div>
 
             <p className="text-xs text-lexora-500 mt-6 font-light">
-              Don't have documents? Load the Freelance Agreement v1 and v2 from the Landing Page.
+              Don&apos;t have documents? Load the Freelance Agreement v1 and v2 from the Landing Page.
             </p>
           </div>
         ) : (

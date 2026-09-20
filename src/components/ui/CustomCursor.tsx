@@ -11,10 +11,8 @@ export function CustomCursor() {
   useEffect(() => {
     // Only run on desktop
     if (window.matchMedia('(pointer: coarse)').matches) return;
-    
-    setIsVisible(true);
-
     const updateMousePosition = (e: MouseEvent) => {
+      if (!isVisible) setIsVisible(true);
       setMousePosition({ x: e.clientX, y: e.clientY });
       
       // Check if hovering over clickable element

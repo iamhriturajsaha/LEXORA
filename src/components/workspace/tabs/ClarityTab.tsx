@@ -19,12 +19,11 @@ export function ClarityTab() {
   const { state, dispatch } = useApp();
   const { analysis, selectedClauseId } = state;
 
-  if (!analysis) return null;
 
   const grouped = IMPORTANCE_ORDER.map(level => ({
     level,
     ...IMPORTANCE_LABELS[level],
-    clauses: analysis.clauses.filter(c => c.importance === level),
+    clauses: analysis?.clauses.filter(c => c.importance === level) || [],
   })).filter(g => g.clauses.length > 0);
 
   // Auto-scroll to selected clause
@@ -36,6 +35,8 @@ export function ClarityTab() {
       }
     }
   }, [selectedClauseId]);
+
+  if (!analysis) return null;
 
   return (
     <div className="p-4 space-y-6">

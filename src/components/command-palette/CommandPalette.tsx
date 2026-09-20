@@ -39,8 +39,6 @@ export function CommandPalette() {
   useEffect(() => {
     if (state.commandPaletteOpen) {
       setTimeout(() => inputRef.current?.focus(), 50);
-    } else {
-      setSearch('');
     }
   }, [state.commandPaletteOpen]);
 

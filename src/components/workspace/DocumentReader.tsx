@@ -7,20 +7,17 @@ export function DocumentReader() {
   const { state, dispatch } = useApp();
   const { document: doc, analysis, plainLanguageMode, selectedClauseId, searchQuery } = state;
 
-  if (!doc) return null;
-
   // Build searchable highlighted content
   const renderedSections = useMemo(() => {
-    return doc.sections.length > 0
-      ? doc.sections.map(section => ({
-          ...section,
-          matchingClause: analysis?.clauses.find(c =>
-            c.sourceLocation.section?.includes(section.title.slice(0, 20)) ||
-            section.content.includes(c.originalText.slice(0, 50))
-          ),
-        }))
-      : null;
-  }, [doc.sections, analysis?.clauses]);
+    return doc?.sections.length ? doc.sections.map(section => ({
+      ...section,
+      matchingClause: analysis?.clauses.find(c =>
+        c.sourceLocation.section?.includes(section.title.slice(0, 20)) ||
+        section.content.includes(c.originalText.slice(0, 50))
+      ),
+    })) : null;
+  }, [doc, analysis]);
+
 
   // Highlight search terms and decrypt jargon
   function highlightText(text: string): React.ReactNode[] {
@@ -80,7 +77,7 @@ export function DocumentReader() {
   return (
     <div className="max-w-3xl mx-auto px-6 py-12 pb-24 relative">
       {/* Document title */}
-      <h2 className="text-4xl md:text-5xl font-black font-display text-white mb-2 tracking-tight leading-tight">{analysis?.title || doc.title}</h2>
+      <h2 className="text-4xl md:text-5xl font-black font-display text-white mb-2 tracking-tight leading-tight">{analysis?.title || doc?.title}</h2>
       {analysis?.documentType && (
         <div className="text-sm font-semibold tracking-widest text-accent-500 uppercase mb-12">{analysis.documentType}</div>
       )}
@@ -132,7 +129,7 @@ export function DocumentReader() {
           })
         ) : (
           // Fallback: render raw text with page breaks
-          doc.pages.map((page) => (
+          doc?.pages.map((page) => (
             <div key={page.pageNumber} id={`page-${page.pageNumber}`} className="mb-8">
               <div className="text-[10px] text-lexora-600 font-mono mb-2">Page {page.pageNumber}</div>
               {page.content.split('\n').map((line, i) => (

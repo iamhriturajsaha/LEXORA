@@ -11,6 +11,7 @@ import type {
   ParsedDocument,
   DocumentChunk,
 } from '@/types/document';
+import { DemoProvider } from './demo';
 
 export interface AIProvider {
   readonly name: string;
@@ -65,7 +66,5 @@ export function getAIProvider(): AIProvider {
     const { GeminiProvider } = require('./gemini');
     return new GeminiProvider(geminiKey);
   }
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { DemoProvider } = require('./demo');
   return new DemoProvider();
 }

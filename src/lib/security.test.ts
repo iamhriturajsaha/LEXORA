@@ -44,4 +44,11 @@ describe('Security Utils', () => {
       expect(containsPromptInjection('This is a standard NDA contract.')).toBe(false);
     });
   });
+
+  describe('checkRateLimit', () => {
+    it('allows requests within limit', () => {
+      const res = checkRateLimit('127.0.0.1');
+      expect(res.allowed).toBe(true);
+    });
+  });
 });

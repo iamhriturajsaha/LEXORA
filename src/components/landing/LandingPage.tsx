@@ -1,7 +1,7 @@
 'use client';
 
 import { useApp } from '@/lib/store';
-import { parseDocumentFromText } from '@/lib/documents/parser';
+import { parseDocumentFromText } from '@/lib/documents/text-parser';
 import { FREELANCE_AGREEMENT_TEXT, RESIDENTIAL_LEASE_TEXT, EMPLOYMENT_OFFER_TEXT, NDA_TEXT, SAAS_TOS_TEXT } from '@/data/sample-documents';
 import { FREELANCE_ANALYSIS } from '@/data/demo-analysis';
 import { FileUploadZone } from '@/components/shared/FileUploadZone';
@@ -417,7 +417,7 @@ export function LandingPage() {
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-display font-black text-white mb-6 tracking-tight">Experience Lexora</h2>
             <p className="text-lg text-lexora-400 font-light max-w-2xl mx-auto">
-              Don't have a document ready? Step into the workspace with our pre-analyzed samples.
+              Don&apos;t have a document ready? Step into the workspace with our pre-analyzed samples.
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">

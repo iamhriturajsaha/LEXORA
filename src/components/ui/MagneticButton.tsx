@@ -36,8 +36,6 @@ export function MagneticButton({ children, strength = 40, className, ...props }:
 
     if (isHovered) {
       window.addEventListener('mousemove', handleMouseMove);
-    } else {
-      setPosition({ x: 0, y: 0 });
     }
 
     return () => window.removeEventListener('mousemove', handleMouseMove);
@@ -47,7 +45,7 @@ export function MagneticButton({ children, strength = 40, className, ...props }:
     <motion.div
       ref={buttonRef}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseLeave={() => { setIsHovered(false); setPosition({ x: 0, y: 0 }); }}
       animate={{ x: position.x, y: position.y }}
       transition={{ type: 'spring', stiffness: 150, damping: 15, mass: 0.1 }}
       className={clsx('relative inline-flex items-center justify-center', className)}
