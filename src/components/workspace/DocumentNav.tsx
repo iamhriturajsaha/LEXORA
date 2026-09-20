@@ -1,8 +1,10 @@
 'use client';
 
 import { useApp } from '@/lib/store';
-import { FileText, ChevronRight } from 'lucide-react';
+import { FileText, ChevronRight, Plus, Check } from 'lucide-react';
 import { CLAUSE_CATEGORY_LABELS } from '@/types/document';
+import { handleFileUpload } from '@/components/landing/LandingPage';
+import clsx from 'clsx';
 
 export function DocumentNav() {
   const { state, dispatch } = useApp();
@@ -19,8 +21,50 @@ export function DocumentNav() {
 
   return (
     <div className="p-4 space-y-6">
-      {/* Document info */}
+      {/* Open Documents list */}
       <div>
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-[10px] font-semibold text-lexora-500 uppercase tracking-wider">Open Documents</h3>
+          <label className="cursor-pointer text-[10px] text-accent-500 hover:text-accent-400 flex items-center gap-1 font-medium transition-colors">
+            <Plus className="w-3 h-3" /> Add
+            <input 
+              type="file" 
+              className="hidden" 
+              multiple 
+              accept=".pdf,.txt,.md,.docx"
+              onChange={(e) => {
+                const files = e.target.files ? Array.from(e.target.files) : [];
+                if (files.length > 0) handleFileUpload(files, dispatch);
+              }} 
+            />
+          </label>
+        </div>
+        <div className="space-y-1">
+          {state.openDocuments.map((d) => {
+            const isActive = d.document.id === state.activeDocumentId;
+            return (
+              <button
+                key={d.document.id}
+                onClick={() => dispatch({ type: 'SET_ACTIVE_DOCUMENT', payload: d.document.id })}
+                className={clsx(
+                  "w-full text-left px-2 py-2 rounded text-xs transition-colors flex items-center gap-2",
+                  isActive ? "bg-accent-500/10 text-accent-400 border border-accent-500/20" : "text-lexora-400 hover:bg-lexora-800/50 hover:text-lexora-200 border border-transparent"
+                )}
+              >
+                <FileText className="w-3 h-3 shrink-0" />
+                <span className="truncate flex-1">{d.document.fileName}</span>
+                {isActive && <Check className="w-3 h-3 shrink-0" />}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      <div className="h-px bg-white/5" />
+
+      {/* Current Document info */}
+      <div>
+        <h3 className="text-[10px] font-semibold text-lexora-500 uppercase tracking-wider mb-2">Active Document</h3>
         <div className="flex items-center gap-2 mb-3">
           <FileText className="w-4 h-4 text-accent-500" />
           <span className="text-xs font-semibold text-lexora-200 truncate">{doc.fileName}</span>

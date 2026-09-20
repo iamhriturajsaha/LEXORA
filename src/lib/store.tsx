@@ -23,6 +23,11 @@ interface AppState {
   workspaceTab: WorkspaceTab;
   document: ParsedDocument | null;
   analysis: DocumentAnalysis | null;
+  openDocuments: Array<{
+    document: ParsedDocument;
+    analysis: DocumentAnalysis;
+  }>;
+  activeDocumentId: string | null;
   comparisonDocA: ParsedDocument | null;
   comparisonDocB: ParsedDocument | null;
   comparisonResult: ComparisonResult | null;
@@ -44,6 +49,8 @@ interface AppState {
 type AppAction =
   | { type: 'SET_VIEW'; payload: AppView }
   | { type: 'SET_WORKSPACE_TAB'; payload: WorkspaceTab }
+  | { type: 'ADD_DOCUMENT'; payload: { document: ParsedDocument; analysis: DocumentAnalysis } }
+  | { type: 'SET_ACTIVE_DOCUMENT'; payload: string }
   | { type: 'SET_DOCUMENT'; payload: ParsedDocument }
   | { type: 'SET_ANALYSIS'; payload: DocumentAnalysis }
   | { type: 'SET_COMPARISON_DOCS'; payload: { docA: ParsedDocument; docB: ParsedDocument } }
@@ -69,6 +76,8 @@ const initialState: AppState = {
   workspaceTab: 'overview',
   document: null,
   analysis: null,
+  openDocuments: [],
+  activeDocumentId: null,
   comparisonDocA: null,
   comparisonDocB: null,
   comparisonResult: null,
@@ -93,6 +102,36 @@ function appReducer(state: AppState, action: AppAction): AppState {
       return { ...state, view: action.payload, error: null };
     case 'SET_WORKSPACE_TAB':
       return { ...state, workspaceTab: action.payload };
+    case 'ADD_DOCUMENT': {
+      const newDoc = action.payload;
+      // Prevent duplicates by checking ID
+      const exists = state.openDocuments.some(d => d.document.id === newDoc.document.id);
+      const newDocs = exists 
+        ? state.openDocuments.map(d => d.document.id === newDoc.document.id ? newDoc : d)
+        : [...state.openDocuments, newDoc];
+      
+      return {
+        ...state,
+        openDocuments: newDocs,
+        activeDocumentId: newDoc.document.id,
+        document: newDoc.document,
+        analysis: newDoc.analysis,
+        view: 'workspace',
+        isAnalyzing: false,
+        analysisStage: ''
+      };
+    }
+    case 'SET_ACTIVE_DOCUMENT': {
+      const selected = state.openDocuments.find(d => d.document.id === action.payload);
+      if (!selected) return state;
+      return {
+        ...state,
+        activeDocumentId: selected.document.id,
+        document: selected.document,
+        analysis: selected.analysis,
+        view: 'workspace'
+      };
+    }
     case 'SET_DOCUMENT':
       return { ...state, document: action.payload, view: 'workspace' };
     case 'SET_ANALYSIS':

@@ -2,7 +2,7 @@
 
 import { useApp } from '@/lib/store';
 import { parseDocumentFromText } from '@/lib/documents/parser';
-import { FREELANCE_AGREEMENT_TEXT, RESIDENTIAL_LEASE_TEXT, EMPLOYMENT_OFFER_TEXT } from '@/data/sample-documents';
+import { FREELANCE_AGREEMENT_TEXT, RESIDENTIAL_LEASE_TEXT, EMPLOYMENT_OFFER_TEXT, NDA_TEXT, SAAS_TOS_TEXT } from '@/data/sample-documents';
 import { FREELANCE_ANALYSIS } from '@/data/demo-analysis';
 import { FileUploadZone } from '@/components/shared/FileUploadZone';
 import { motion, useScroll, useTransform } from 'framer-motion';
@@ -35,8 +35,10 @@ export function LandingPage() {
   function loadDemo(docText: string, docId: string, fileName: string) {
     const parsed = parseDocumentFromText(docText, fileName, docId);
     dispatch({ type: 'SET_IS_DEMO', payload: true });
-    dispatch({ type: 'SET_DOCUMENT', payload: parsed });
-    dispatch({ type: 'SET_ANALYSIS', payload: { ...FREELANCE_ANALYSIS, documentId: docId } });
+    dispatch({ 
+      type: 'ADD_DOCUMENT', 
+      payload: { document: parsed, analysis: { ...FREELANCE_ANALYSIS, documentId: docId } } 
+    });
   }
 
   function loadFreelanceDemo() {
@@ -423,6 +425,8 @@ export function LandingPage() {
               { title: 'Freelance Agreement', desc: 'Web development contract with IP, payment, and termination clauses.', text: FREELANCE_AGREEMENT_TEXT, id: 'demo-freelance-v1', file: 'Freelance_Agreement.pdf' },
               { title: 'Residential Lease', desc: 'Apartment lease with rent, deposit, and maintenance terms.', text: RESIDENTIAL_LEASE_TEXT, id: 'demo-lease-v1', file: 'Residential_Lease.pdf' },
               { title: 'Employment Offer', desc: 'Job offer with salary, equity, non-compete, and benefits.', text: EMPLOYMENT_OFFER_TEXT, id: 'demo-employment-v1', file: 'Employment_Offer.pdf' },
+              { title: 'Non-Disclosure Agreement', desc: 'Standard mutual NDA with confidentiality obligations and terms.', text: NDA_TEXT, id: 'demo-nda-v1', file: 'Mutual_NDA.pdf' },
+              { title: 'SaaS Terms of Service', desc: 'B2B software terms covering licensing, uptime, and data privacy.', text: SAAS_TOS_TEXT, id: 'demo-saas-v1', file: 'CloudSync_ToS.pdf' },
             ].map((doc, i) => (
               <MagneticButton key={i} strength={15} className="w-full">
                 <button
@@ -584,7 +588,8 @@ export function LandingPage() {
 }
 
 /** Handle file upload from any upload input */
-async function handleFileUpload(file: File, dispatch: ReturnType<typeof useApp>['dispatch']) {
+async function handleFileUpload(files: File[], dispatch: ReturnType<typeof useApp>['dispatch']) {
+  if (!files.length) return;
   dispatch({ type: 'SET_ANALYZING', payload: true });
   dispatch({ type: 'SET_VIEW', payload: 'workspace' as const });
 
@@ -599,26 +604,33 @@ async function handleFileUpload(file: File, dispatch: ReturnType<typeof useApp>[
   // Animate stages
   for (const stage of stages) {
     dispatch({ type: 'SET_ANALYSIS_STAGE', payload: stage });
-    await new Promise(r => setTimeout(r, 700));
+    await new Promise(r => setTimeout(r, 400));
   }
 
   try {
-    const formData = new FormData();
-    formData.append('file', file);
+    const results = await Promise.all(files.map(async (file) => {
+      const formData = new FormData();
+      formData.append('file', file);
 
-    const response = await fetch('/api/analyze', {
-      method: 'POST',
-      body: formData,
+      const response = await fetch('/api/analyze', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || 'Analysis failed');
+      }
+
+      return response.json();
+    }));
+
+    results.forEach(data => {
+      dispatch({ 
+        type: 'ADD_DOCUMENT', 
+        payload: { document: data.document, analysis: data.analysis } 
+      });
     });
-
-    if (!response.ok) {
-      const err = await response.json();
-      throw new Error(err.error || 'Analysis failed');
-    }
-
-    const data = await response.json();
-    dispatch({ type: 'SET_DOCUMENT', payload: data.document });
-    dispatch({ type: 'SET_ANALYSIS', payload: data.analysis });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'An unexpected error occurred';
     dispatch({ type: 'SET_ERROR', payload: message });

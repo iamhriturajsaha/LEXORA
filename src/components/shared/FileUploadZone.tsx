@@ -15,18 +15,20 @@ export function FileUploadZone() {
   const onDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
-    const file = e.dataTransfer.files[0];
-    if (file) processFile(file);
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length > 0) processFiles(files);
   }, []);
 
-  const processFile = (file: File) => {
+  const processFiles = (files: File[]) => {
     setError(null);
-    const validation = validateFileUpload({ name: file.name, size: file.size, type: file.type });
-    if (!validation.valid) {
-      setError(validation.error || 'Invalid file');
-      return;
+    for (const file of files) {
+      const validation = validateFileUpload({ name: file.name, size: file.size, type: file.type });
+      if (!validation.valid) {
+        setError(`${file.name}: ${validation.error || 'Invalid file'}`);
+        return;
+      }
     }
-    handleFileUpload(file, dispatch);
+    handleFileUpload(files, dispatch);
   };
 
   return (
@@ -48,18 +50,19 @@ export function FileUploadZone() {
             type="file"
             className="hidden"
             accept=".pdf,.txt,.md,.docx"
+            multiple
             onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) processFile(file);
+              const files = e.target.files ? Array.from(e.target.files) : [];
+              if (files.length > 0) processFiles(files);
             }}
-            aria-label="Upload document"
+            aria-label="Upload documents"
           />
           <Upload className={`w-8 h-8 mx-auto mb-4 ${isDragOver ? 'text-accent-500' : 'text-lexora-500'}`} />
           <p className="text-sm font-medium text-lexora-200 mb-1">
-            {isDragOver ? 'Drop your document here' : 'Drag & drop your document, or click to browse'}
+            {isDragOver ? 'Drop your documents here' : 'Drag & drop your documents, or click to browse'}
           </p>
           <p className="text-xs text-lexora-500">
-            PDF, DOCX, TXT, or Markdown — up to 10MB
+            PDF, DOCX, TXT, or Markdown — up to 10MB each
           </p>
         </label>
       </motion.div>

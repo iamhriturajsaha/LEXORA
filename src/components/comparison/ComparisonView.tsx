@@ -12,19 +12,51 @@ import { DEMO_COMPARISON } from '@/data/demo-qa';
 export function ComparisonView() {
   const { state, dispatch } = useApp();
   const [isLoading, setIsLoading] = useState(false);
+  const [docAId, setDocAId] = useState<string>('');
+  const [docBId, setDocBId] = useState<string>('');
 
-  const loadComparisonDemo = useCallback(async () => {
+  const runComparison = useCallback(async () => {
+    if (!docAId || !docBId) return;
+    
+    const docAData = state.openDocuments.find(d => d.document.id === docAId);
+    const docBData = state.openDocuments.find(d => d.document.id === docBId);
+    
+    if (!docAData || !docBData) return;
+
     setIsLoading(true);
-    const docA = parseDocumentFromText(FREELANCE_AGREEMENT_TEXT, 'Freelance_Agreement_v1.pdf', 'demo-freelance-v1');
-    const docB = parseDocumentFromText(FREELANCE_AGREEMENT_V2_TEXT, 'Freelance_Agreement_v2.pdf', 'demo-freelance-v2');
+    dispatch({ type: 'SET_COMPARISON_DOCS', payload: { docA: docAData.document, docB: docBData.document } });
 
-    dispatch({ type: 'SET_COMPARISON_DOCS', payload: { docA, docB } });
+    // If both are demo docs, use demo data to save API costs
+    if (docAId === 'demo-freelance-v1' && docBId === 'demo-freelance-v2') {
+      await new Promise(r => setTimeout(r, 1000));
+      dispatch({ type: 'SET_COMPARISON_RESULT', payload: DEMO_COMPARISON });
+      setIsLoading(false);
+      return;
+    }
 
-    // Simulate loading
-    await new Promise(r => setTimeout(r, 1000));
-    dispatch({ type: 'SET_COMPARISON_RESULT', payload: DEMO_COMPARISON });
-    setIsLoading(false);
-  }, [dispatch]);
+    try {
+      const res = await fetch('/api/compare', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          documentA: docAData.document,
+          documentB: docBData.document,
+          analysisA: docAData.analysis,
+          analysisB: docBData.analysis
+        })
+      });
+
+      if (!res.ok) throw new Error('Comparison failed');
+      
+      const data = await res.json();
+      dispatch({ type: 'SET_COMPARISON_RESULT', payload: data.comparison });
+    } catch (err) {
+      console.error(err);
+      alert('Failed to run comparison. Ensure API keys are set.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [docAId, docBId, state.openDocuments, dispatch]);
 
   const comparison = state.comparisonResult;
 
@@ -54,17 +86,48 @@ export function ComparisonView() {
               Upload two versions of a document to see what changed, what it means, and why it matters.
             </p>
 
-            <button
-              onClick={loadComparisonDemo}
-              disabled={isLoading}
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-accent-500 text-black font-bold text-sm hover:bg-accent-400 transition-all disabled:opacity-50 uppercase tracking-widest"
-            >
-              {isLoading ? 'Comparing...' : 'Try comparison demo'}
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            <div className="max-w-2xl mx-auto mb-10 p-6 rounded-xl border border-lexora-800 bg-black/40 backdrop-blur-md">
+              <div className="grid md:grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label className="block text-xs font-medium text-lexora-400 mb-2 uppercase tracking-wider">Document A (Original)</label>
+                  <select 
+                    value={docAId} 
+                    onChange={e => setDocAId(e.target.value)}
+                    className="w-full bg-lexora-900 border border-lexora-700 rounded-lg p-3 text-sm text-white focus:border-accent-500 outline-none"
+                  >
+                    <option value="" disabled>Select a document...</option>
+                    {state.openDocuments.map(d => (
+                      <option key={d.document.id} value={d.document.id}>{d.document.fileName}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-lexora-400 mb-2 uppercase tracking-wider">Document B (Modified)</label>
+                  <select 
+                    value={docBId} 
+                    onChange={e => setDocBId(e.target.value)}
+                    className="w-full bg-lexora-900 border border-lexora-700 rounded-lg p-3 text-sm text-white focus:border-accent-500 outline-none"
+                  >
+                    <option value="" disabled>Select a document...</option>
+                    {state.openDocuments.map(d => (
+                      <option key={d.document.id} value={d.document.id}>{d.document.fileName}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <button
+                onClick={runComparison}
+                disabled={isLoading || !docAId || !docBId || docAId === docBId}
+                className="w-full flex items-center justify-center gap-2 px-8 py-4 rounded-lg bg-accent-500 text-black font-bold text-sm hover:bg-accent-400 transition-all disabled:opacity-50 uppercase tracking-widest"
+              >
+                {isLoading ? 'Running Analysis...' : 'Run Comparison'}
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
 
             <p className="text-xs text-lexora-500 mt-6 font-light">
-              Compares Freelance Agreement v1 vs v2 — includes payment, termination, and IP changes
+              Don't have documents? Load the Freelance Agreement v1 and v2 from the Landing Page.
             </p>
           </div>
         ) : (

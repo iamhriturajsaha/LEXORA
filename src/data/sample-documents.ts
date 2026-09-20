@@ -502,3 +502,26 @@ CONTRACTOR:
 By: ________________________________
 Name: [Your Name]
 Title: Independent Contractor`;
+
+export const NDA_TEXT = `MUTUAL NON-DISCLOSURE AGREEMENT
+
+This Mutual Non-Disclosure Agreement ("Agreement") is made this 1st day of October, 2025, between TechInnovate Inc. ("Company") and [Your Name] ("Counterparty").
+
+1. Confidential Information. "Confidential Information" means any non-public information disclosed by either party to the other, including trade secrets, business plans, software, and financial data.
+2. Obligations. The receiving party shall hold the Confidential Information in strict confidence and not disclose it to any third party for a period of three (3) years from the date of disclosure.
+3. Exclusions. Confidential Information does not include information that is publicly known, already known to the receiving party, or independently developed.
+4. Return of Materials. Upon request, all materials containing Confidential Information must be returned or destroyed within five (5) days.
+5. No License. Nothing in this Agreement grants any rights or license to the Confidential Information.
+`;
+
+export const SAAS_TOS_TEXT = `SOFTWARE-AS-A-SERVICE TERMS OF SERVICE
+
+Welcome to CloudSync platform ("Service"), provided by CloudSync LLC ("Provider"). 
+By using the Service, you ("Customer") agree to these Terms.
+
+1. License. Provider grants Customer a non-exclusive, non-transferable license to use the Service during the subscription term.
+2. Data Privacy. Customer retains all rights to data uploaded to the Service. Provider will process data in accordance with its Privacy Policy and applicable laws.
+3. Fees. Fees are billed annually in advance. No refunds are provided for partial use or early termination.
+4. Uptime Guarantee. Provider guarantees 99.9% uptime. If uptime falls below this, Customer is entitled to service credits up to 10% of the monthly fee.
+5. Termination. Either party may terminate with 30 days notice. Upon termination, Customer data will be deleted after 60 days.
+`;
