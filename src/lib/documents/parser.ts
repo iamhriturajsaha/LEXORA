@@ -96,25 +96,35 @@ export function parseDocumentFromText(
   };
 }
 
-/** Parse PDF */
+/** Parse PDF using pdf2json (stable on Vercel) */
 async function parsePDF(buffer: Buffer): Promise<string> {
-  // Polyfill DOMMatrix for Node.js environments (Vercel)
-  if (typeof global !== 'undefined' && !(global as any).DOMMatrix) {
-    (global as any).DOMMatrix = class DOMMatrix {
-      a=1; b=0; c=0; d=1; e=0; f=0;
-      constructor() {}
-    };
-  }
+  return new Promise((resolve, reject) => {
+    try {
+      const PDFParser = require('pdf2json');
+      const pdfParser = new PDFParser(null, 1);
 
-  try {
-    const pdfParse = require('pdf-parse');
-    const data = await pdfParse(buffer);
-    return data.text;
-  } catch (error) {
-    const msg = error instanceof Error ? error.message : String(error);
-    console.error('PDF Parse Error:', error);
-    throw new Error('Failed to parse PDF. Details: ' + msg);
-  }
+      pdfParser.on('pdfParser_dataError', (errData: any) => {
+        reject(new Error('Failed to parse PDF: ' + errData.parserError));
+      });
+
+      pdfParser.on('pdfParser_dataReady', () => {
+        let rawText = pdfParser.getRawTextContent();
+        
+        // Clean up pdf2json artifacts
+        // 1. Remove Page Break markers like ----------------Page (0) Break----------------
+        rawText = rawText.replace(/-+Page \(\d+\) Break-+/gi, '\n\n');
+        
+        // 2. Remove weird excessive newlines
+        rawText = rawText.replace(/\n{3,}/g, '\n\n');
+        
+        resolve(rawText);
+      });
+
+      pdfParser.parseBuffer(buffer);
+    } catch (error) {
+      reject(new Error('Failed to parse PDF. Details: ' + (error instanceof Error ? error.message : String(error))));
+    }
+  });
 }
 
 /** Parse DOCX */

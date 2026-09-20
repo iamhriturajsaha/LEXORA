@@ -112,6 +112,7 @@ IMPORTANT RULES:
 - Use qualified language in plainLanguage explanations
 - Mark confidence as "low" when information is ambiguous
 - The originalText field must contain actual text from the document, not paraphrased text
+- Fix any weird spacing or kerning in the text caused by PDF extraction (e.g. "De veloped int eractive" should be "Developed interactive")
 
 DOCUMENT TEXT:
 ---
