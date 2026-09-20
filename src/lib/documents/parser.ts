@@ -96,35 +96,17 @@ export function parseDocumentFromText(
   };
 }
 
-/** Parse PDF using pdf2json (stable on Vercel) */
+/** Parse PDF using unpdf (Edge-safe, zero kerning errors) */
 async function parsePDF(buffer: Buffer): Promise<string> {
-  return new Promise((resolve, reject) => {
-    try {
-      const PDFParser = require('pdf2json');
-      const pdfParser = new PDFParser(null, 1);
-
-      pdfParser.on('pdfParser_dataError', (errData: any) => {
-        reject(new Error('Failed to parse PDF: ' + errData.parserError));
-      });
-
-      pdfParser.on('pdfParser_dataReady', () => {
-        let rawText = pdfParser.getRawTextContent();
-        
-        // Clean up pdf2json artifacts
-        // 1. Remove Page Break markers like ----------------Page (0) Break----------------
-        rawText = rawText.replace(/-+Page \(\d+\) Break-+/gi, '\n\n');
-        
-        // 2. Remove weird excessive newlines
-        rawText = rawText.replace(/\n{3,}/g, '\n\n');
-        
-        resolve(rawText);
-      });
-
-      pdfParser.parseBuffer(buffer);
-    } catch (error) {
-      reject(new Error('Failed to parse PDF. Details: ' + (error instanceof Error ? error.message : String(error))));
-    }
-  });
+  try {
+    const { extractText } = await import('unpdf');
+    const { text } = await extractText(new Uint8Array(buffer));
+    return text;
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error('PDF Parse Error:', error);
+    throw new Error('Failed to parse PDF cleanly. Details: ' + msg);
+  }
 }
 
 /** Parse DOCX */
