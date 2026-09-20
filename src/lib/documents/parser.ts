@@ -98,28 +98,15 @@ export function parseDocumentFromText(
 
 /** Parse PDF */
 async function parsePDF(buffer: Buffer): Promise<string> {
-  return new Promise((resolve, reject) => {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const PDFParser = require('pdf2json');
-      const pdfParser = new PDFParser(null, 1);
-
-      pdfParser.on('pdfParser_dataError', (errData: any) => {
-        console.error('PDF Parse Error:', errData.parserError);
-        reject(new Error('Failed to parse PDF. The file may be corrupted, encrypted, or in an unsupported format.'));
-      });
-
-      pdfParser.on('pdfParser_dataReady', () => {
-        resolve(pdfParser.getRawTextContent());
-      });
-
-      pdfParser.parseBuffer(buffer);
-    } catch (error) {
-      const msg = error instanceof Error ? error.message : String(error);
-      console.error('PDF Parse Error:', error);
-      reject(new Error('Failed to parse PDF. Details: ' + msg));
-    }
-  });
+  try {
+    const pdfParse = require('pdf-parse');
+    const data = await pdfParse(buffer);
+    return data.text;
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error('PDF Parse Error:', error);
+    throw new Error('Failed to parse PDF. Details: ' + msg);
+  }
 }
 
 /** Parse DOCX */
