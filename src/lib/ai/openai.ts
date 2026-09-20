@@ -187,7 +187,8 @@ export class OpenAIProvider implements AIProvider {
       temperature: 0.1,
     });
 
-    const content = response.choices[0]?.message?.content || '{}';
+    let content = response.choices[0]?.message?.content || '{}';
+    content = content.replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim();
 
     try {
       return JSON.parse(content);
