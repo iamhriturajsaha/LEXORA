@@ -60,7 +60,7 @@ export const FileUploadZone = memo(function FileUploadZone() {
             }}
             aria-label="Upload documents"
           />
-          <Upload className={`w-8 h-8 mx-auto mb-4 ${isDragOver ? 'text-accent-500' : 'text-lexora-500'}`} />
+          <Upload aria-hidden="true" className={`w-8 h-8 mx-auto mb-4 ${isDragOver ? 'text-accent-500' : 'text-lexora-500'}`} />
           <p className="text-sm font-medium text-lexora-200 mb-1">
             {isDragOver ? 'Drop your documents here' : 'Drag & drop your documents, or click to browse'}
           </p>
@@ -76,7 +76,7 @@ export const FileUploadZone = memo(function FileUploadZone() {
           animate={{ opacity: 1, y: 0 }}
           className="mt-3 flex items-center gap-2 text-sm text-danger p-3 rounded-lg bg-danger/10 border border-danger/20"
         >
-          <AlertCircle className="w-4 h-4 shrink-0" />
+          <AlertCircle aria-hidden="true" className="w-4 h-4 shrink-0" />
           <span>{error}</span>
         </motion.div>
       )}
