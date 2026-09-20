@@ -101,7 +101,7 @@ async function parsePDF(buffer: Buffer): Promise<string> {
   try {
     const { extractText } = await import('unpdf');
     const { text } = await extractText(new Uint8Array(buffer));
-    return text;
+    return Array.isArray(text) ? text.join('\n') : text;
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
     console.error('PDF Parse Error:', error);
