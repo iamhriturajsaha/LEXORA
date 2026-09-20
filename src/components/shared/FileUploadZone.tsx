@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, memo } from 'react';
 import { motion } from 'framer-motion';
 import { Upload, FileText, AlertCircle } from 'lucide-react';
 import { useApp } from '@/lib/store';
 import { validateFileUpload } from '@/lib/security';
 import { handleFileUpload } from '@/components/landing/LandingPage';
 
-export function FileUploadZone() {
+export const FileUploadZone = memo(function FileUploadZone() {
   const { dispatch } = useApp();
   const [isDragOver, setIsDragOver] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,11 +34,14 @@ export function FileUploadZone() {
   return (
     <div>
       <motion.div
-        className={`relative border-2 border-dashed rounded-xl p-12 text-center transition-colors cursor-pointer ${
+        className={`relative border-2 border-dashed rounded-xl p-12 text-center transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 ${
           isDragOver
             ? 'border-accent-500 bg-accent-500/5'
             : 'border-lexora-700 hover:border-lexora-500 bg-lexora-900/30'
         }`}
+        role="region"
+        aria-label="File upload dropzone"
+        tabIndex={0}
         onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
         onDragLeave={() => setIsDragOver(false)}
         onDrop={onDrop}
