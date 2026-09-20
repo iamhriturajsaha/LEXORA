@@ -82,4 +82,4 @@ export const FileUploadZone = memo(function FileUploadZone() {
       )}
     </div>
   );
-}
+});
